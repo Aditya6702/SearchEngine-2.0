@@ -63,34 +63,32 @@ function App() {
 
       {/* Main content */}
       <div className="App">
-      <div className="header">
-       
-        <form>
-          <input
-            onChange={handleAdd}
-            className="search-bar"
-            type="text"
-            id="search"
-            placeholder="Search Google or type a URL"
-          />
-          <div className="search-buttons">
-            <button className="search-button" type="submit" onClick={handleSubmit}>
-              Google Search
-            </button>
-            <button className="search-button" type="submit" onClick={handleSubmit}>
-              I'm Feeling Lucky
-            </button>
-          </div>
-        </form>
-        <div className="header-right">
-          <a className="nav-button" onClick={handleLoginClick}>
-            Sign in
-          </a>
-          <a className="nav-button" onClick={handleAboutClick}>
-            About
-          </a>
+  <div className="header">
+    <div style={{ textAlign: "center" }}>
+      <form>
+        <input
+          onChange={handleAdd}
+          className="search-bar"
+          type="text"
+          id="search"
+          placeholder="Search..."
+        />
+        <div className="search-buttons">
+          <button className="search-button" type="submit" onClick={handleSubmit}>
+            Search
+          </button>
         </div>
-      </div>
+      </form>
+    </div>
+    <div className="header-right">
+      <a className="nav-button" onClick={handleLoginClick}>
+        Sign in
+      </a>
+      <a className="nav-button" onClick={handleAboutClick}>
+        About
+      </a>
+    </div>
+  </div>
 
         {/* Render console text on page */}
         <div dangerouslySetInnerHTML={{ __html: consoleText }}></div>
