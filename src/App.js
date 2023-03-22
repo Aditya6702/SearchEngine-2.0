@@ -8,6 +8,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [showAboutPopup, setShowAboutPopup] = useState(false);
+  const [recommendations, setRecommendations] = useState([]);
 
   const handleAdd = (e) => {
     setText(e.target.value);
@@ -32,9 +33,13 @@ function App() {
       });
   };
 
-  const handleLoginClick = () => {
-    setShowLoginPopup(true);
-  };
+  function handleLoginClick() {
+    // Set the URL to redirect to
+    const redirectUrl = "http://localhost/login.html";
+  
+    // Navigate to the new URL
+    window.location.href = redirectUrl;
+  }
 
   const handleAboutClick = () => {
     setShowAboutPopup(true);
@@ -45,81 +50,81 @@ function App() {
     setShowAboutPopup(false);
   };
 
+  const handleRecommendations = (e) => {
+    setText(e.target.value);
+    const url = `http://localhost:80/recommendations/?query=${e.target.value}`;
+    axios
+      .get(url)
+      .then((res) => {
+        setRecommendations(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleRecommendationClick = (value) => {
+    setText(value);
+    setRecommendations([]);
+  };
+
   return (
     <div>
       {/* Navigation bar */}
-      <nav class="navbar">
-  <div class="navbar-container">
-    <div class="logo-container">
-      <h3 class="logo">My App</h3>
-    </div>
-  
-    <div class="nav-buttons">
-      <button class="btn-nav" onClick={handleLoginClick}>Login</button>
-      <button class="btn-nav" onClick={handleAboutClick}>About</button>
-    </div>
-  </div>
-</nav>
+      
 
       {/* Main content */}
       <div className="App">
-  <div className="header">
-    <div style={{ textAlign: "center" }}>
-      <form>
-        <input
-          onChange={handleAdd}
-          className="search-bar"
-          type="text"
-          id="search"
-          placeholder="Search..."
-        />
-        <div className="search-buttons">
-          <button className="search-button" type="submit" onClick={handleSubmit}>
-            Search
-          </button>
+        <div className="header">
+          <div style={{ textAlign: "center" }}>
+            <form>
+              <input
+                onChange={handleAdd}
+                onKeyUp={handleRecommendations}
+                className="search-bar"
+                type="text"
+                id="search"
+                placeholder="Search..."
+                value={text}
+              />
+              <div className="search-buttons">
+                <button className="search-button" type="submit" onClick={handleSubmit}>
+                  Search
+                </button>
+              </div>
+            </form>
+            {recommendations.length > 0 && (
+              <div className="recommendations">
+                {recommendations.map((r) => (
+                  <div
+                    key={r}
+                    className="recommendation"
+                    onClick={() => handleRecommendationClick(r)}
+                  >
+                    {r}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          <div className="header-right">
+            <a className="nav-button" onClick={handleLoginClick}>
+              Sign in
+            </a>
+            <a className="nav-button" onClick={handleAboutClick}>
+              About
+            </a>
+          </div>
         </div>
-      </form>
-    </div>
-    <div className="header-right">
-      <a className="nav-button" onClick={handleLoginClick}>
-        Sign in
-      </a>
-      <a className="nav-button" onClick={handleAboutClick}>
-        About
-      </a>
-    </div>
-  </div>
 
         {/* Render console text on page */}
         <div dangerouslySetInnerHTML={{ __html: consoleText }}></div>
 
-        {/* Add some hooks-based styling */}
-        <div className="popup-container">
-          {showLoginPopup && (
-            <div className="popup">
-              <h2>Login Popup</h2>
-              <form>
-                <label htmlFor="username">Username:</label>
-                <input type="text" id="username" name="username" />
-
-                <label htmlFor="password">Password:</label>
-                <input type="password" id="password" name="password" />
-
-                <button type="submit">Submit</button>
-              </form>
-              <button onClick={handlePopupClose}>Close</button>
-            </div>
-          )}
-          {showAboutPopup && (
-            <div className="popup">
-              <h2>About Popup</h2>
-              <p>This is a demo app created using React.</p>
-              <button onClick={handlePopupClose}>Close</button>
-            </div>
-          )}
+       
+          
         </div>
       </div>
-    </div>
+    
   );
 }
 
